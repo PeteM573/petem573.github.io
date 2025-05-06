@@ -222,6 +222,227 @@ a:hover, a:focus {
     /* margin-top: var(--spacing-unit); */
 }
 
+/* --- Responsive Navigation Styles --- */
+
+.nav-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns nav content (and toggle) to the right by default */
+  align-items: center;
+  /* The padding for the nav container should effectively replace .main-header padding */
+  /* If .main-header has padding, you might want to move it here or remove it */
+  padding-left: calc(var(--spacing-unit) * 1.5);
+  padding-right: calc(var(--spacing-unit) * 1.5);
+  width: 100%;
+  max-width: 960px; /* Consistent with your .container */
+  margin: 0 auto;   /* Center the nav content container */
+  position: relative; /* For potential absolute positioning of children if needed */
+}
+
+/* Adjust .main-header if it had its own padding */
+.main-header {
+/* padding: var(--spacing-unit) 0; /* REMOVE or comment out if .nav-container handles horizontal padding */
+/* Your existing sticky, top, background-color, border-bottom, transition styles remain */
+}
+
+
+.nav-toggle {
+  display: none; /* Hidden by default, shown on mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem; /* Tappable area */
+  z-index: 1001; /* Above the mobile nav panel */
+  order: 1; /* Ensure it's on the right if logo area is used */
+}
+
+.hamburger-icon {
+  display: block;
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: var(--clr-text); /* Use text color for the icon */
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--clr-text); /* Use text color */
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-icon::before {
+  top: -8px;
+}
+
+.hamburger-icon::after {
+  bottom: -8px;
+}
+
+/* Hamburger animation to "X" when active */
+.nav-toggle[aria-expanded="true"] .hamburger-icon {
+  background-color: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .hamburger-icon::before {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .hamburger-icon::after {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* --- Original .main-nav and .main-nav ul styles (Desktop First / Default) --- */
+/* These are your existing styles, ensure they are present and not overridden by mobile-first styles initially */
+.main-nav {
+  /* Desktop: nav is part of the flow */
+}
+.main-nav ul {
+list-style: none;
+display: flex; /* This is key for desktop horizontal layout */
+justify-content: center;
+align-items: center;
+gap: calc(var(--spacing-unit) * 2);
+margin: 0; /* Reset any default ul margins */
+padding: 0; /* Reset any default ul paddings */
+}
+/* .main-nav a, #theme-toggle, #lang-toggle styling from your existing CSS apply here */
+
+
+/* --- Mobile Navigation Overrides --- */
+@media (max-width: 767.98px) { /* Breakpoint for mobile nav */
+  .nav-container {
+      /* On mobile, ensure toggle is on the far right */
+      justify-content: flex-end;
+  }
+
+  .main-nav { /* The <nav> element itself */
+      position: fixed;
+      top: 0;
+      left: 0; /* Start from the left for slide-in */
+      width: 100%;
+      height: 100vh;
+      background-color: var(--clr-background);
+      z-index: 1000;
+      
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      
+      transform: translateX(-100%); /* Start off-screen to the left */
+      /* opacity: 0; visibility: hidden; */ /* Alternative hiding method */
+      transition: transform 0.3s ease-in-out;
+  }
+
+  .main-nav.is-active {
+      transform: translateX(0); /* Slide in from left */
+      /* opacity: 1; visibility: visible; */
+  }
+
+  .main-nav ul {
+      flex-direction: column; /* Stack items vertically */
+      gap: var(--spacing-unit) * 1.5; /* Adjust gap for vertical items */
+      width: 100%; /* Make ul take full width of the panel */
+  }
+
+  .main-nav li {
+      width: 100%;
+      text-align: center;
+  }
+
+  .main-nav a, /* This is now .nav-link */
+  .main-nav .nav-link, /* Target the links specifically */
+  .main-nav #theme-toggle,
+  .main-nav #lang-toggle {
+      display: block; /* Make full width for easy tapping */
+      padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit); /* Adjust padding */
+      font-size: 1.2rem; /* Slightly larger text for mobile menu */
+      /* Ensure colors are correct for mobile menu background */
+      color: var(--clr-text);
+  }
+  
+  .main-nav .nav-link:hover,
+  .main-nav .nav-link:focus,
+  .main-nav .nav-link.active {
+      color: var(--clr-accent); /* Hover/active color */
+      background-color: rgba(var(--clr-accent-rgb, 56, 178, 172), 0.1); /* Subtle background on hover/active */
+  }
+  
+  /* Theme/Lang toggle buttons specific styling in mobile menu */
+  .main-nav #theme-toggle {
+      /* existing styles fine, ensure color var(--clr-text) is applied */
+  }
+  .main-nav #theme-toggle:hover,
+  .main-nav #theme-toggle:focus {
+      color: var(--clr-accent);
+  }
+
+  .main-nav #lang-toggle {
+      color: var(--clr-accent); /* Keep consistent with desktop toggle */
+      border-color: var(--clr-accent);
+  }
+  .main-nav #lang-toggle:hover,
+  .main-nav #lang-toggle:focus {
+      background-color: var(--clr-accent);
+      color: var(--clr-background);
+  }
+
+
+  .nav-toggle { /* Hamburger button */
+      display: block; /* Show the hamburger button */
+  }
+  
+  /* Hide desktop nav items when hamburger is active, show mobile nav */
+  .main-nav:not(.is-active) ul { /* This is for desktop - hide when toggle is visible */
+      /* This rule might be tricky. Simpler to just let .main-nav.is-active control visibility */
+  }
+  
+  /* If you had a logo area and want it to disappear on mobile to give space to toggle */
+  /* .logo-area { display: none; } */
+
+}
+
+/* Re-assert desktop styles if needed (if mobile-first was more aggressive) */
+/* This media query block is for any desktop-specific overrides */
+/* Your existing @media (min-width: 768px) block can house these */
+/*
+@media (min-width: 768px) {
+  .nav-container {
+      justify-content: center; /* Or flex-end, depending on desired desktop layout * /
+  }
+  .main-nav {
+      position: static; /* Reset from fixed */
+/*transform: none; /* Reset transform */
+/*height: auto; /* Reset height */
+/*background-color: transparent; /* Reset background */
+/*display: block; /* Ensure it's visible and takes space * /
+  }
+  .main-nav ul {
+      flex-direction: row; /* Ensure horizontal layout * /
+      justify-content: center; /* Or flex-end * /
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 2);
+  }
+  .nav-toggle {
+      display: none; /* Hide hamburger on desktop * /
+  }
+}
+*/
+/* Add this to your :root and body.dark-mode for the hover background */
+:root {
+  /* ... other variables ... */
+  --clr-accent-rgb: 56, 178, 172; /* Teal (from #38B2AC) */
+}
+body.dark-mode {
+  /* ... other variables ... */
+  --clr-accent-rgb: 79, 209, 197; /* Brighter Teal (from #4FD1C5) */
+}
+
 /* --- Language Toggle Visibility --- */
 
 /* Hide Japanese content by default */

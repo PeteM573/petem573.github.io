@@ -149,3 +149,50 @@ if (langToggle) {
 } else {
     console.error("Language toggle button with ID 'lang-toggle' not found.");
 }
+
+// --- Responsive Navigation (Hamburger Menu) ---
+
+const navToggle = document.querySelector('.nav-toggle');
+const mainNavigation = document.getElementById('main-navigation'); // Corrected ID from HTML
+const navLinksForMobileMenu = document.querySelectorAll('#main-navigation .nav-link'); // Links for closing menu
+
+if (navToggle && mainNavigation) {
+    navToggle.addEventListener('click', () => {
+        const isExpanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
+        navToggle.setAttribute('aria-expanded', !isExpanded);
+        mainNavigation.classList.toggle('is-active');
+
+        // Optional: Prevent body scroll when mobile nav is open
+        if (mainNavigation.classList.contains('is-active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close mobile menu when a nav link is clicked (for single-page navigation)
+    navLinksForMobileMenu.forEach(link => {
+        link.addEventListener('click', () => {
+            // Check if the mobile menu is active before trying to close
+            if (mainNavigation.classList.contains('is-active')) {
+                navToggle.setAttribute('aria-expanded', 'false');
+                mainNavigation.classList.remove('is-active');
+                document.body.style.overflow = ''; // Restore scroll
+            }
+        });
+    });
+
+    // Optional: Close mobile menu if user clicks outside of it (on the overlay)
+    // mainNavigation.addEventListener('click', (event) => {
+    //     if (event.target === mainNavigation && mainNavigation.classList.contains('is-active')) {
+    //         navToggle.setAttribute('aria-expanded', 'false');
+    //         mainNavigation.classList.remove('is-active');
+    //         document.body.style.overflow = '';
+    //     }
+    // });
+
+
+} else {
+    if (!navToggle) console.error("Navigation toggle button (.nav-toggle) not found.");
+    if (!mainNavigation) console.error("Main navigation element (#main-navigation) not found.");
+}
