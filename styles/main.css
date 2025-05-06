@@ -12,28 +12,48 @@ html {
   scroll-padding-top: 4rem; /* Offset for fixed header during scroll-to */
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: var(--clr-text);
-  background-color: var(--clr-background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Color Palette & Fonts */
+/* Color Palette & Fonts - Light Mode (Default) */
 :root {
-  --clr-background: #FFFFFF; /* White */
-  --clr-text: #2D3748;       /* Dark Gray */
-  --clr-accent: #38B2AC;     /* Teal */
-  --clr-light-gray-bg: #f7fafc; /* Subtle off-white for alternating sections */
-  --clr-heading: #1A202C;    /* Slightly darker for headings */
+  --clr-background: #FFFFFF;       /* White */
+  --clr-text: #2D3748;           /* Dark Gray */
+  --clr-heading: #1A202C;        /* Near Black */
+  --clr-accent: #38B2AC;         /* Teal */
+  --clr-light-gray-bg: #f7fafc;  /* Subtle off-white */
+  --clr-border: #e2e8f0;         /* Light border color */
+  --clr-subtle-text: #718096;   /* Lighter gray for footer/sub-headlines */
+  --clr-bg-alt: var(--clr-light-gray-bg); /* Use variable for alternating background */
+  --clr-background-rgb: 255, 255, 255; /* RGB for header transparency */
 
   --font-heading: 'Lato', sans-serif;
   --font-body: 'Roboto', sans-serif;
 
   --spacing-unit: 1rem; /* Base unit for margins/paddings */
 }
+
+/* Dark Mode Overrides */
+body.dark-mode {
+  --clr-background: #1A202C;       /* Dark Charcoal */
+  --clr-text: #E2E8F0;           /* Light Gray */
+  --clr-heading: #F7FAFC;        /* Near White */
+  --clr-accent: #4FD1C5;         /* Brighter Teal for dark bg */
+  --clr-light-gray-bg: #2D3748;  /* Darker Gray for alternating sections */
+  --clr-border: #4A5568;         /* Gray border color */
+  --clr-subtle-text: #A0AEC0;   /* Medium Gray for footer/sub-headlines */
+  --clr-bg-alt: var(--clr-light-gray-bg); /* Ensure alt bg updates */
+  --clr-background-rgb: 26, 32, 44; /* RGB for header transparency */
+}
+
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--clr-text);
+  background-color: var(--clr-background);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 
 /* Typography */
 h1, h2, h3 {
@@ -48,6 +68,7 @@ h2 { font-size: clamp(1.8rem, 4vw + 1rem, 2.5rem); }
 
 p {
   margin-bottom: var(--spacing-unit);
+  color: var(--clr-text); /* Ensure paragraphs inherit text color */
 }
 
 a {
@@ -76,31 +97,33 @@ a:hover, a:focus {
 }
 
 .alt-bg {
-  background-color: var(--clr-light-gray-bg);
+  background-color: var(--clr-bg-alt); /* Use variable for alt background */
 }
 
 /* Header & Nav */
 .main-header {
-  position: sticky; /* Or fixed if preferred */
+  position: sticky;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.95); /* Slight transparency */
-  backdrop-filter: blur(5px); /* Optional: blur effect */
+  background-color: rgba(var(--clr-background-rgb), 0.95); /* Use RGB variable */
+  backdrop-filter: blur(5px);
   z-index: 10;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--clr-border); /* Use variable for border */
   padding: var(--spacing-unit) 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
 }
 
 .main-nav ul {
   list-style: none;
   display: flex;
-  justify-content: center; /* Or flex-end */
+  justify-content: center;
+  align-items: center; /* Align items vertically */
   gap: calc(var(--spacing-unit) * 2);
 }
 
 .main-nav a {
   text-decoration: none;
   color: var(--clr-text);
-  font-weight: 500; /* From Roboto weights */
+  font-weight: 500;
 }
 .main-nav a:hover,
 .main-nav a:focus,
@@ -109,22 +132,43 @@ a:hover, a:focus {
   text-decoration: none;
 }
 
+/* Theme Toggle Button Styling */
+#theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem; /* Adjust size */
+  cursor: pointer;
+  color: var(--clr-text); /* Use text color variable */
+  padding: 0;
+  margin: 0;
+  line-height: 1; /* Prevent extra spacing */
+  transition: transform 0.2s ease, color 0.3s ease; /* Add color transition */
+  margin-left: var(--spacing-unit); /* Add some space before the button */
+}
+
+#theme-toggle:hover,
+#theme-toggle:focus {
+  transform: scale(1.1);
+  outline: none; /* Or provide a custom focus style */
+  color: var(--clr-accent); /* Highlight on hover/focus */
+}
+
+
 /* Hero Section */
 .hero-section {
-  min-height: 60vh; /* Adjust as needed */
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding-top: calc(var(--spacing-unit) * 4); /* Adjust if header height changes */
+  padding-top: calc(var(--spacing-unit) * 4);
   padding-bottom: calc(var(--spacing-unit) * 4);
-  /* Optional: background image/gradient */
 }
 
 .hero-section .sub-headline {
   font-size: 1.125rem;
-  color: #4A5568; /* Slightly lighter than main text */
-  max-width: 600px; /* Constrain width */
+  color: var(--clr-subtle-text); /* Use subtle text color variable */
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -137,25 +181,23 @@ a:hover, a:focus {
   margin-bottom: calc(var(--spacing-unit) * 2);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  /* TODO: Consider aspect ratio */
+  border: 1px solid var(--clr-border); /* Add subtle border */
 }
 
 .project-description p {
-  margin-bottom: calc(var(--spacing-unit) * 0.5); /* Tighter spacing within description */
+  margin-bottom: calc(var(--spacing-unit) * 0.5);
+  color: var(--clr-text); /* Ensure text color applies */
 }
 
 /* Skills Section */
 .skills-list {
   list-style: none;
   padding-left: 0;
-  /* Consider a grid layout for larger screens */
-  /* display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-unit); */
 }
 
 .skills-list li {
   margin-bottom: calc(var(--spacing-unit) * 0.75);
+  color: var(--clr-text); /* Ensure text color applies */
 }
 
 .skills-list strong {
@@ -169,13 +211,15 @@ a:hover, a:focus {
 }
 .contact-links li {
   margin-bottom: calc(var(--spacing-unit) * 0.5);
+  color: var(--clr-text); /* Ensure text color applies */
 }
 
 /* Links styled consistently */
 .link-styled {
     font-weight: 500;
-    display: inline-block; /* Allows margin/padding */
-    /* margin-top: var(--spacing-unit); */ /* Optional spacing */
+    display: inline-block;
+    /* Optional spacing */
+    /* margin-top: var(--spacing-unit); */
 }
 
 
@@ -185,19 +229,23 @@ a:hover, a:focus {
   padding: calc(var(--spacing-unit) * 2);
   margin-top: calc(var(--spacing-unit) * 3);
   font-size: 0.875rem;
-  color: #718096; /* Lighter gray */
-  border-top: 1px solid #e2e8f0;
+  color: var(--clr-subtle-text); /* Use subtle text color variable */
+  border-top: 1px solid var(--clr-border); /* Use border color variable */
+  transition: border-color 0.3s ease; /* Smooth transition */
 }
 
 /* Responsive Adjustments (Mobile First Principle) */
-/* Base styles are mobile-first, add media queries for larger screens */
-
 @media (min-width: 768px) {
-  /* --- Placeholder for potential 768px+ adjustments --- */
+  /* Placeholder for future responsive styles */
 
-  /* Example: Adjust font sizes if needed */
-  /* h1 { font-size: 3rem; } */
-  /* h2 { font-size: 2.25rem; } */
+  /* Example: Apply grid layout to skills list (uncomment and modify if used) */
+   /*
+   .skills-list {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+       gap: var(--spacing-unit);
+   }
+   */
 
   /* Example: Adjust project layout on larger screens (uncomment and modify if used) */
   /*
@@ -212,18 +260,4 @@ a:hover, a:focus {
   /* }
   */
 
-  /* Example: Center nav on larger screens more reliably (uncomment and modify if used) */
-  /* .main-nav ul { justify-content: flex-end; } */
-
-  /* Example: Apply grid layout to skills list (uncomment and modify if used) */
-   /*
-   .skills-list {
-       display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-       gap: var(--spacing-unit);
-   }
-   */
 }
-
-/* TODO: Add further responsive refinements as needed */
-/* TODO: Refine spacing, typography details, hover states */
