@@ -222,7 +222,96 @@ a:hover, a:focus {
     /* margin-top: var(--spacing-unit); */
 }
 
+/* --- Language Toggle Visibility --- */
 
+/* Hide Japanese content by default */
+.lang-ja {
+  display: none;
+}
+
+/* Ensure English content is displayed by default */
+/* Use 'block' for block-level elements like divs, paragraphs */
+/* Use 'inline' or 'inline-block' for span elements if you use them later */
+.lang-en {
+  display: block; /* Or adjust as needed based on element type */
+}
+
+/* When Japanese is selected (via class on body), show Japanese and hide English */
+body.lang-selected-ja .lang-ja {
+  display: block; /* Or adjust as needed */
+}
+
+body.lang-selected-ja .lang-en {
+  display: none;
+}
+
+/* Style the language toggle button */
+#lang-toggle {
+  background: none;
+  border: 1px solid var(--clr-accent); /* Give it a subtle border */
+  color: var(--clr-accent);
+  padding: 0.2em 0.6em; /* Adjust padding */
+  font-size: 0.9rem; /* Make it slightly smaller than nav links */
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: var(--spacing-unit); /* Space from theme toggle */
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#lang-toggle:hover,
+#lang-toggle:focus {
+  background-color: var(--clr-accent);
+  color: var(--clr-background); /* Invert colors on hover */
+  outline: none;
+}
+
+/* --- Styling for Narrative Enhancements --- */
+
+/* Subheadings within the narrative */
+#about h3 {
+  font-size: 1.5rem; /* Slightly smaller than section h2 */
+  color: var(--clr-accent); /* Use accent color to stand out */
+  margin-top: calc(var(--spacing-unit) * 2.5); /* Add space above */
+  margin-bottom: calc(var(--spacing-unit) * 1); /* Space below */
+  font-weight: 700; /* Make them bold (Lato supports 700) */
+}
+
+/* First h3 might need less top margin if h2 already provides enough */
+#about h3:first-of-type {
+    margin-top: calc(var(--spacing-unit) * 1.5);
+}
+
+/* Pull Quote Styling */
+.pull-quote {
+  border-left: 4px solid var(--clr-accent);
+  padding-left: calc(var(--spacing-unit) * 1.5);
+  margin-top: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  margin-left: calc(var(--spacing-unit) * 1); /* Optional indent */
+  font-size: 1.15rem; /* Slightly larger */
+  font-style: italic;
+  color: var(--clr-heading); /* Use heading color for emphasis */
+}
+
+.pull-quote strong {
+    font-style: normal; /* Reset italic for the bolded part if needed */
+}
+
+/* Strategic Bolding (already handled by HTML strong tag, but ensure it's visible) */
+strong {
+  font-weight: 700; /* Ensure boldness is applied (Roboto supports 500/700) */
+  color: var(--clr-heading); /* Make bold text slightly more prominent */
+}
+
+/* Optional: Subtle Divider */
+.section-divider {
+    border: none;
+    height: 1px;
+    background-color: var(--clr-border);
+    margin-top: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
 /* Footer */
 .main-footer {
   text-align: center;

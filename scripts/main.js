@@ -101,3 +101,51 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
         }
     }
 });
+
+// --- Language Toggle Code ---
+
+const langToggle = document.getElementById('lang-toggle');
+const htmlEl = document.documentElement; // Get the <html> element
+
+// Function to set the language
+function setLanguage(lang) {
+    if (lang === 'ja') {
+        // Switch to Japanese
+        htmlEl.setAttribute('lang', 'ja'); // Update <html lang="...">
+        document.body.classList.add('lang-selected-ja'); // Add class to body
+        langToggle.textContent = 'EN'; // Update button text to show the *other* option
+        langToggle.setAttribute('aria-label', 'Switch to English'); // Update accessibility label
+        localStorage.setItem('portfolioLang', 'ja'); // Save preference
+    } else {
+        // Switch to English (default)
+        htmlEl.setAttribute('lang', 'en'); // Update <html lang="...">
+        document.body.classList.remove('lang-selected-ja'); // Remove class from body
+        langToggle.textContent = '日本語'; // Update button text
+        langToggle.setAttribute('aria-label', 'Switch to Japanese'); // Update accessibility label
+        localStorage.setItem('portfolioLang', 'en'); // Save preference
+    }
+    // Optional: Re-run scrollspy activation in case content height changed significantly
+    // activateNavLink();
+}
+
+// Apply saved language on initial load
+const savedLang = localStorage.getItem('portfolioLang');
+
+// Set initial language based on saved preference or default to 'en'
+setLanguage(savedLang === 'ja' ? 'ja' : 'en');
+
+
+// Add event listener for the language toggle button
+if (langToggle) {
+    langToggle.addEventListener('click', () => {
+        // Check current language and toggle
+        const currentLang = htmlEl.getAttribute('lang');
+        if (currentLang === 'ja') {
+            setLanguage('en');
+        } else {
+            setLanguage('ja');
+        }
+    });
+} else {
+    console.error("Language toggle button with ID 'lang-toggle' not found.");
+}
