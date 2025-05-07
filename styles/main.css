@@ -129,11 +129,6 @@ a:hover, a:focus {
     min-height: 4rem; /* Ensures header has some visible height */
 }
 
-.logo-area { /* NEW - Placeholder */
-    /* Styles for your logo/site title if you add one */
-    /* Example: flex-grow: 1; to take available space */
-}
-
 .nav-toggles-group { /* NEW - For always-visible toggles */
     display: flex;
     align-items: center;
@@ -245,6 +240,21 @@ a:hover, a:focus {
 /* END: HEADER AND NAVIGATION STYLES (Desktop Defaults)   */
 /* ======================================================== */
 
+/* Styling for Name in Hero Section */
+.hero-name-container {
+  margin-bottom: calc(var(--spacing-unit) * 1.5); /* Space below name, before main H1 */
+  text-align: center; /* Ensures name is centered */
+}
+
+.site-owner-name {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw + 1rem, 4rem); /* Large and responsive */
+  font-weight: 700;
+  color: var(--clr-heading);
+  line-height: 1.1;
+  margin-bottom: 0; /* Reset margin if h1 has it, .hero-name-container controls spacing */
+}
+
 
 /* Hero Section */
 .hero-section {
@@ -265,19 +275,56 @@ a:hover, a:focus {
 }
 
 /* Project Section */
-.project-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin-bottom: calc(var(--spacing-unit) * 2);
+/* === NEW/UPDATED GLOBAL PROJECT SECTION STYLES === */
+#project h2 { /* Targets h2 within any language container in #project */
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 2); /* Consistent spacing */
+}
+
+.project-image-link { /* The <a> tag wrapping the image - GLOBAL */
+  display: block; /* Ensures it's a block element for centering and layout */
+  text-decoration: none;
+  width: 100%; /* Takes full width of its parent's content box, up to max-width */
+  max-width: 650px; /* Adjust to control max visual width of image block */
+  margin-left: auto;  /* Center the block */
+  margin-right: auto; /* Center the block */
+  margin-bottom: calc(var(--spacing-unit) * 2); /* Space below image block */
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border: 1px solid var(--clr-border);
+  overflow: hidden; /* Ensures the img respects the border-radius of the link */
+  box-shadow: 0 4px 12px rgba(var(--clr-background-rgb),0.08); /* Softer default shadow, adapt color if needed */
+  border: 1px solid var(--clr-border); /* Consistent border */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.project-description p {
-  margin-bottom: calc(var(--spacing-unit) * 0.5);
-  color: var(--clr-text);
+
+.project-image-link:hover,
+.project-image-link:focus {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(var(--clr-background-rgb),0.15); /* Enhanced shadow, adapt color if needed */
+  outline: 2px solid var(--clr-accent); /* Focus indicator */
 }
+/* .project-image-link:focus can be combined with :hover if styles are identical */
+
+.project-image { /* The <img> tag itself - GLOBAL, simplified */
+  display: block; /* Remove any extra space below image if it were inline */
+  width: 100%; /* Make image fill the .project-image-link container */
+  height: auto; /* Maintain aspect ratio */
+  /* border-radius, box-shadow, border are now handled by .project-image-link */
+}
+
+.project-description { /* The div containing P tags - GLOBAL */
+max-width: 650px;
+width: 100%; /* Takes full width of parent's content box, up to max-width */
+margin-left: auto;  /* Center the block */
+margin-right: auto; /* Center the block */
+text-align: left; /* Ensures text INSIDE this block (like P tags) is left-aligned */
+}
+
+.project-description p { /* Existing style, ensure it's placed after .project-description */
+margin-bottom: calc(var(--spacing-unit) * 0.5);
+color: var(--clr-text);
+}
+/* === END OF NEW/UPDATED GLOBAL PROJECT SECTION STYLES === */
+
 
 /* Skills Section */
 .skills-list {
@@ -472,8 +519,8 @@ strong {
       width: auto;
       background-color: transparent;
       z-index: auto;
-      order: 2;
-      margin-right: auto;
+      order: 2; /* Page Links come after logo-area */
+      margin-right: auto; /* Pushes .nav-toggles-group to the far right */
   }
 
   /* Desktop: Ensure the UL of page links is horizontal */
@@ -482,13 +529,26 @@ strong {
       flex-direction: row;
   }
 
-  /* Desktop layout of .nav-container children */
-  .logo-area {
-      order: 1;
-  }
-  .nav-toggles-group {
-      order: 3;
-  }
+/* Desktop layout of .nav-container children */
+.logo-area {
+  order: 1;
+  /* flex-grow: 1; /* If you want to push nav to the right */
+  /* If logo-area is truly empty and will remain so, you could remove it from HTML */
+  /* and adjust the .main-nav and .nav-toggles-group layout accordingly */
+}
+.main-nav { /* Page links container */
+  order: 2;
+  /* margin-right: auto; /* REMOVE this if logo-area is empty and you want links more centered */
+  /* If logo-area is empty, .main-nav will be left, .nav-toggles-group right due to space-between */
+  /* To truly center .main-nav with toggles on right, .logo-area would need content or to act as spacer */
+  margin-left: auto; /* Push main-nav away from potential logo-area */
+  margin-right: auto; /* Attempt to center main-nav between logo-area and toggles */
+
+}
+.nav-toggles-group {
+  order: 3;
+  /* margin-left: auto; /* Add this if .main-nav doesn't have margin-right: auto to push toggles */
+}
 
   /* --- Your other desktop-specific styles --- */
   /* Skills list in a grid */
@@ -499,57 +559,55 @@ strong {
  }
 
 /* --- PROJECT SECTION STYLING FOR DESKTOP (CENTERED, SINGLE COLUMN) --- */
-/* REMOVE PREVIOUS GRID STYLES FOR #project .container */
 #project .container {
-    /* No display: grid needed here for single column.
-       The default block layout of children will stack them.
-       We just need to ensure content within is centered if desired. */
-    /* To center the block elements (image link, description div) within the container: */
-    display: flex; /* Use flexbox on the container */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    text-align: center; /* Center inline content like text in paragraphs if not already */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers .project-image-link and .project-description blocks */
 }
 
-/* Styling for the project image link (the <a> tag) */
-.project-image-link {
-  display: block; /* Or inline-block if preferred for centering context */
-  text-decoration: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 100%; /* Allow it to take width, but constrain with max-width */
-  max-width: 600px; /* Adjust this to control max image width */
-  margin-bottom: calc(var(--spacing-unit) * 1.5); /* Space between image and description */
-  /* justify-self: center; /* Not needed with flex align-items:center on parent */
+#project .container h2 { /* Center "Featured Project..." heading */
+  text-align: center;
+  width: 100%; /* Ensures it can be centered properly */
+  margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
+.project-image-link { /* The <a> tag wrapping the image */
+display: block; /* Behaves like a block for centering */
+text-decoration: none;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+border-radius: 8px;
+overflow: hidden;
+width: 100%; /* Takes full width of its parent's content box, up to max-width */
+max-width: 650px; /* Adjust to control max visual width of image block */
+margin-bottom: calc(var(--spacing-unit) * 2); /* Space below image block */
+/* margin-left: auto; margin-right: auto; /* Not needed if parent is flex + align-items: center */
+}
 .project-image-link:hover,
 .project-image-link:focus {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  outline: 2px solid var(--clr-accent);
+transform: scale(1.02);
+box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+outline: 2px solid var(--clr-accent);
 }
 .project-image-link:focus {
-    outline: 2px solid var(--clr-accent);
+  outline: 2px solid var(--clr-accent);
 }
 
 .project-image { /* The <img> tag itself */
-  display: block;
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+display: block; /* Remove any extra space below image if it were inline */
+max-width: 100%; /* Image scales to fit the width of .project-image-link */
+height: auto; /* Maintain aspect ratio */
+border-radius: 8px;
 }
 
-.project-description {
-    max-width: 700px; /* Constrain width of text block for readability */
-    /* text-align: left; /* If you want text within description left-aligned, despite parent center */
+.project-description { /* The div containing P tags for Challenge, Solution etc. */
+  max-width: 650px; /* Max width for the text block for readability */
+  width: 100%; /* Takes full width of parent's content box, up to max-width */
+  text-align: left; /* Ensures text INSIDE this block (like P tags) is left-aligned */
 }
-/* If you want the "Challenge/Solution/Impact" <strong> tags to be left-aligned
-   but the paragraph text itself to be centered, that requires more specific targeting.
-   For now, text-align: center on #project .container will center all inline content.
-*/
+.project-description p {
+  /* text-align: left; /* Redundant if parent has it, but doesn't hurt */
 }
-/* ======================================================== */
-/* END: DESKTOP RESETS/OVERRIDES (Min-Width Media Query) */
-/* ======================================================== */
+.project-description strong {
+  /* Styles for <strong> if needed, but should inherit fine */
+}
+}
