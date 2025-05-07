@@ -455,74 +455,101 @@ strong {
 
 
 /* ======================================================== */
-/* START: DESKTOP NAVIGATION RESETS/OVERRIDES (Min-Width Media Query) */
+/* START: DESKTOP RESETS/OVERRIDES (Min-Width Media Query) */
 /* ======================================================== */
 
 @media (min-width: 768px) {
-    /* Desktop: Hide the hamburger button */
-    .nav-toggle {
-        display: none;
-    }
-
-    /* Desktop: Ensure .main-nav (page links container) is correctly reset from mobile styles */
-    .main-nav { /* This is <nav id="main-navigation"> */
-        position: static; /* Reset from fixed */
-        transform: none;  /* Reset transform */
-        height: auto;     /* Reset height */
-        width: auto;      /* Allow it to size based on its content (the ul) */
-        background-color: transparent; /* Reset background */
-        z-index: auto;    /* Reset z-index */
-        /* It's a flex item in .nav-container, no need for display:flex here unless controlling its own children */
-        /* order property will position it within .nav-container */
-    }
-
-    /* Desktop: Ensure the UL of page links is horizontal */
-    .main-nav ul {
-        display: flex !important; /* Ensure desktop nav links are visible and flexed */
-        flex-direction: row;    /* Explicitly row for desktop */
-        /* Other desktop ul styles (gap, align-items, etc.) are already defined globally */
-    }
-
-    /* Desktop layout of .nav-container children:
-       HTML Source Order in .nav-container: logo-area | nav-toggles-group | nav-toggle | main-nav
-       Target Layout: Logo (left) | Page Links (center/leftish) .... | Toggles Group (right)
-    */
-    .logo-area {
-        order: 1; /* First item */
-    }
-    .main-nav { /* Page links container */
-        order: 2; /* Second item */
-        margin-right: auto; /* Pushes .nav-toggles-group to the far right */
-    }
-    .nav-toggles-group {
-        order: 3; /* Third item, will be on the far right */
-    }
-    /* .nav-toggle is display:none on desktop, its order is not critical here */
-
-
-    /* --- Your existing other desktop-specific styles --- */
-    /* Example: Skills list in a grid */
-   .skills-list {
-       display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust minmax as needed */
-       gap: var(--spacing-unit) * 1.5;
-   }
-
-  /* Example: Project section in two columns */
-  #project .container {
-      display: grid;
-      grid-template-columns: minmax(300px, 1fr) 2fr; /* Image column and text column */
-      gap: calc(var(--spacing-unit) * 3);
-      align-items: flex-start; /* Align items to the top of their grid area */
+  /* Desktop: Hide the hamburger button */
+  .nav-toggle {
+      display: none;
   }
-  .project-image {
-      margin-bottom: 0; /* Reset margin if it was for single column layout */
-      /* max-width: 400px; /* Optional: constrain image width */
+
+  /* Desktop: Ensure .main-nav (page links container) is correctly reset from mobile styles */
+  .main-nav {
+      position: static;
+      transform: none;
+      height: auto;
+      width: auto;
+      background-color: transparent;
+      z-index: auto;
+      order: 2;
+      margin-right: auto;
   }
-  .project-description {
-      /* Text content will flow in the second column */
+
+  /* Desktop: Ensure the UL of page links is horizontal */
+  .main-nav ul {
+      display: flex !important;
+      flex-direction: row;
   }
+
+  /* Desktop layout of .nav-container children */
+  .logo-area {
+      order: 1;
+  }
+  .nav-toggles-group {
+      order: 3;
+  }
+
+  /* --- Your other desktop-specific styles --- */
+  /* Skills list in a grid */
+  .skills-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit) * 1.5);
+ }
+
+/* --- PROJECT SECTION STYLING FOR DESKTOP (CENTERED, SINGLE COLUMN) --- */
+/* REMOVE PREVIOUS GRID STYLES FOR #project .container */
+#project .container {
+    /* No display: grid needed here for single column.
+       The default block layout of children will stack them.
+       We just need to ensure content within is centered if desired. */
+    /* To center the block elements (image link, description div) within the container: */
+    display: flex; /* Use flexbox on the container */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    text-align: center; /* Center inline content like text in paragraphs if not already */
+}
+
+/* Styling for the project image link (the <a> tag) */
+.project-image-link {
+  display: block; /* Or inline-block if preferred for centering context */
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%; /* Allow it to take width, but constrain with max-width */
+  max-width: 600px; /* Adjust this to control max image width */
+  margin-bottom: calc(var(--spacing-unit) * 1.5); /* Space between image and description */
+  /* justify-self: center; /* Not needed with flex align-items:center on parent */
+}
+
+.project-image-link:hover,
+.project-image-link:focus {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  outline: 2px solid var(--clr-accent);
+}
+.project-image-link:focus {
+    outline: 2px solid var(--clr-accent);
+}
+
+.project-image { /* The <img> tag itself */
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.project-description {
+    max-width: 700px; /* Constrain width of text block for readability */
+    /* text-align: left; /* If you want text within description left-aligned, despite parent center */
+}
+/* If you want the "Challenge/Solution/Impact" <strong> tags to be left-aligned
+   but the paragraph text itself to be centered, that requires more specific targeting.
+   For now, text-align: center on #project .container will center all inline content.
+*/
 }
 /* ======================================================== */
-/* END: DESKTOP NAVIGATION RESETS/OVERRIDES               */
+/* END: DESKTOP RESETS/OVERRIDES (Min-Width Media Query) */
 /* ======================================================== */
