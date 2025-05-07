@@ -23,6 +23,7 @@ html {
   --clr-subtle-text: #718096;   /* Lighter gray for footer/sub-headlines */
   --clr-bg-alt: var(--clr-light-gray-bg); /* Use variable for alternating background */
   --clr-background-rgb: 255, 255, 255; /* RGB for header transparency */
+  --clr-accent-rgb: 56, 178, 172; /* ADDED: Teal (from #38B2AC) for rgba */
 
   --font-heading: 'Lato', sans-serif;
   --font-body: 'Roboto', sans-serif;
@@ -41,6 +42,7 @@ body.dark-mode {
   --clr-subtle-text: #A0AEC0;   /* Medium Gray for footer/sub-headlines */
   --clr-bg-alt: var(--clr-light-gray-bg); /* Ensure alt bg updates */
   --clr-background-rgb: 26, 32, 44; /* RGB for header transparency */
+  --clr-accent-rgb: 79, 209, 197; /* ADDED: Brighter Teal (from #4FD1C5) for rgba */
 }
 
 
@@ -100,58 +102,148 @@ a:hover, a:focus {
   background-color: var(--clr-bg-alt); /* Use variable for alt background */
 }
 
-/* Header & Nav */
-.main-header {
+/* ======================================================== */
+/* START: HEADER AND NAVIGATION STYLES (Desktop Defaults)   */
+/* ======================================================== */
+
+.main-header { /* MODIFIED */
   position: sticky;
   top: 0;
-  background-color: rgba(var(--clr-background-rgb), 0.95); /* Use RGB variable */
+  background-color: rgba(var(--clr-background-rgb), 0.95);
   backdrop-filter: blur(5px);
   z-index: 10;
-  border-bottom: 1px solid var(--clr-border); /* Use variable for border */
-  padding: var(--spacing-unit) 0;
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+  border-bottom: 1px solid var(--clr-border);
+  /* padding: var(--spacing-unit) 0; /* REMOVED - .nav-container handles horizontal padding */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.main-nav ul {
+.nav-container { /* NEW */
+    display: flex;
+    justify-content: space-between; /* Distributes space between direct children */
+    align-items: center;
+    padding-left: calc(var(--spacing-unit) * 1.5); /* Header content padding */
+    padding-right: calc(var(--spacing-unit) * 1.5);
+    width: 100%;
+    max-width: 960px; /* Aligns with your main page .container */
+    margin: 0 auto; /* Centers the nav content area */
+    min-height: 4rem; /* Ensures header has some visible height */
+}
+
+.logo-area { /* NEW - Placeholder */
+    /* Styles for your logo/site title if you add one */
+    /* Example: flex-grow: 1; to take available space */
+}
+
+.nav-toggles-group { /* NEW - For always-visible toggles */
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.75); /* Space between theme and lang toggles */
+}
+
+/* Theme Toggle Button Styling - MODIFIED (removed margin-left) */
+#theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--clr-text);
+  padding: 0;
+  margin: 0; /* Reset margins */
+  line-height: 1;
+  transition: transform 0.2s ease, color 0.3s ease;
+  /* margin-left: var(--spacing-unit); /* REMOVED - gap in .nav-toggles-group handles spacing */
+}
+#theme-toggle:hover,
+#theme-toggle:focus {
+  transform: scale(1.1);
+  outline: none;
+  color: var(--clr-accent);
+}
+
+/* Language Toggle Button Styling - MODIFIED (removed margin-left) */
+#lang-toggle {
+  background: none;
+  border: 1px solid var(--clr-accent);
+  color: var(--clr-accent);
+  padding: 0.2em 0.6em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  /* margin-left: var(--spacing-unit); /* REMOVED - gap in .nav-toggles-group handles spacing */
+}
+#lang-toggle:hover,
+#lang-toggle:focus {
+  background-color: var(--clr-accent);
+  color: var(--clr-background);
+  outline: none;
+}
+
+/* Hamburger Button Styling - NEW */
+.nav-toggle {
+    display: none; /* Hidden on desktop by default */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+    margin-left: calc(var(--spacing-unit) * 0.75); /* Space from .nav-toggles-group */
+}
+.hamburger-icon {
+    display: block;
+    position: relative;
+    width: 24px;
+    height: 2px;
+    background-color: var(--clr-text);
+    transition: all 0.3s ease-in-out;
+}
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--clr-text);
+    transition: all 0.3s ease-in-out;
+}
+.hamburger-icon::before { top: -8px; }
+.hamburger-icon::after { bottom: -8px; }
+
+.nav-toggle[aria-expanded="true"] .hamburger-icon { background-color: transparent; }
+.nav-toggle[aria-expanded="true"] .hamburger-icon::before { transform: translateY(8px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .hamburger-icon::after { transform: translateY(-8px) rotate(-45deg); }
+
+
+/* Main Navigation Links Container (for page links like About, Project) - MODIFIED */
+.main-nav {
+    /* This is the <nav> element containing the ul of page links */
+    /* Its position on desktop is determined by flex properties in .nav-container */
+}
+.main-nav ul { /* This UL now ONLY contains page links: About, Project, etc. */
   list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Align items vertically */
-  gap: calc(var(--spacing-unit) * 2);
+  display: flex; /* Horizontal layout for desktop */
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2); /* Your original gap */
+  margin: 0; /* Reset default margins */
+  padding: 0; /* Reset default paddings */
 }
-
-.main-nav a {
+.main-nav a.nav-link { /* Targeting links with class .nav-link for specificity */
   text-decoration: none;
   color: var(--clr-text);
   font-weight: 500;
 }
-.main-nav a:hover,
-.main-nav a:focus,
-.main-nav a.active { /* JS will add/remove .active class for scrollspy */
+.main-nav a.nav-link:hover,
+.main-nav a.nav-link:focus,
+.main-nav a.nav-link.active {
   color: var(--clr-accent);
   text-decoration: none;
 }
 
-/* Theme Toggle Button Styling */
-#theme-toggle {
-  background: none;
-  border: none;
-  font-size: 1.5rem; /* Adjust size */
-  cursor: pointer;
-  color: var(--clr-text); /* Use text color variable */
-  padding: 0;
-  margin: 0;
-  line-height: 1; /* Prevent extra spacing */
-  transition: transform 0.2s ease, color 0.3s ease; /* Add color transition */
-  margin-left: var(--spacing-unit); /* Add some space before the button */
-}
-
-#theme-toggle:hover,
-#theme-toggle:focus {
-  transform: scale(1.1);
-  outline: none; /* Or provide a custom focus style */
-  color: var(--clr-accent); /* Highlight on hover/focus */
-}
+/* ======================================================== */
+/* END: HEADER AND NAVIGATION STYLES (Desktop Defaults)   */
+/* ======================================================== */
 
 
 /* Hero Section */
@@ -164,10 +256,9 @@ a:hover, a:focus {
   padding-top: calc(var(--spacing-unit) * 4);
   padding-bottom: calc(var(--spacing-unit) * 4);
 }
-
 .hero-section .sub-headline {
   font-size: 1.125rem;
-  color: var(--clr-subtle-text); /* Use subtle text color variable */
+  color: var(--clr-subtle-text);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -181,12 +272,11 @@ a:hover, a:focus {
   margin-bottom: calc(var(--spacing-unit) * 2);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border: 1px solid var(--clr-border); /* Add subtle border */
+  border: 1px solid var(--clr-border);
 }
-
 .project-description p {
   margin-bottom: calc(var(--spacing-unit) * 0.5);
-  color: var(--clr-text); /* Ensure text color applies */
+  color: var(--clr-text);
 }
 
 /* Skills Section */
@@ -194,12 +284,10 @@ a:hover, a:focus {
   list-style: none;
   padding-left: 0;
 }
-
 .skills-list li {
   margin-bottom: calc(var(--spacing-unit) * 0.75);
-  color: var(--clr-text); /* Ensure text color applies */
+  color: var(--clr-text);
 }
-
 .skills-list strong {
     color: var(--clr-heading);
 }
@@ -211,321 +299,49 @@ a:hover, a:focus {
 }
 .contact-links li {
   margin-bottom: calc(var(--spacing-unit) * 0.5);
-  color: var(--clr-text); /* Ensure text color applies */
+  color: var(--clr-text);
 }
 
 /* Links styled consistently */
 .link-styled {
     font-weight: 500;
     display: inline-block;
-    /* Optional spacing */
-    /* margin-top: var(--spacing-unit); */
 }
 
-/* --- Responsive Navigation Styles --- */
-
-.nav-container {
-  display: flex;
-  justify-content: flex-end; /* Aligns nav content (and toggle) to the right by default */
-  align-items: center;
-  /* The padding for the nav container should effectively replace .main-header padding */
-  /* If .main-header has padding, you might want to move it here or remove it */
-  padding-left: calc(var(--spacing-unit) * 1.5);
-  padding-right: calc(var(--spacing-unit) * 1.5);
-  width: 100%;
-  max-width: 960px; /* Consistent with your .container */
-  margin: 0 auto;   /* Center the nav content container */
-  position: relative; /* For potential absolute positioning of children if needed */
-}
-
-/* Adjust .main-header if it had its own padding */
-.main-header {
-/* padding: var(--spacing-unit) 0; /* REMOVE or comment out if .nav-container handles horizontal padding */
-/* Your existing sticky, top, background-color, border-bottom, transition styles remain */
-}
-
-
-.nav-toggle {
-  display: none; /* Hidden by default, shown on mobile */
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem; /* Tappable area */
-  z-index: 1001; /* Above the mobile nav panel */
-  order: 1; /* Ensure it's on the right if logo area is used */
-}
-
-.hamburger-icon {
-  display: block;
-  position: relative;
-  width: 24px;
-  height: 2px;
-  background-color: var(--clr-text); /* Use text color for the icon */
-  transition: all 0.3s ease-in-out;
-}
-
-.hamburger-icon::before,
-.hamburger-icon::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: var(--clr-text); /* Use text color */
-  transition: all 0.3s ease-in-out;
-}
-
-.hamburger-icon::before {
-  top: -8px;
-}
-
-.hamburger-icon::after {
-  bottom: -8px;
-}
-
-/* Hamburger animation to "X" when active */
-.nav-toggle[aria-expanded="true"] .hamburger-icon {
-  background-color: transparent;
-}
-
-.nav-toggle[aria-expanded="true"] .hamburger-icon::before {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.nav-toggle[aria-expanded="true"] .hamburger-icon::after {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-/* --- Original .main-nav and .main-nav ul styles (Desktop First / Default) --- */
-/* These are your existing styles, ensure they are present and not overridden by mobile-first styles initially */
-.main-nav {
-  /* Desktop: nav is part of the flow */
-}
-.main-nav ul {
-list-style: none;
-display: flex; /* This is key for desktop horizontal layout */
-justify-content: center;
-align-items: center;
-gap: calc(var(--spacing-unit) * 2);
-margin: 0; /* Reset any default ul margins */
-padding: 0; /* Reset any default ul paddings */
-}
-/* .main-nav a, #theme-toggle, #lang-toggle styling from your existing CSS apply here */
-
-
-/* --- Mobile Navigation Overrides --- */
-@media (max-width: 767.98px) { /* Breakpoint for mobile nav */
-  .nav-container {
-      /* On mobile, ensure toggle is on the far right */
-      justify-content: flex-end;
-  }
-
-  .main-nav { /* The <nav> element itself */
-      position: fixed;
-      top: 0;
-      left: 0; /* Start from the left for slide-in */
-      width: 100%;
-      height: 100vh;
-      background-color: var(--clr-background);
-      z-index: 1000;
-      
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      
-      transform: translateX(-100%); /* Start off-screen to the left */
-      /* opacity: 0; visibility: hidden; */ /* Alternative hiding method */
-      transition: transform 0.3s ease-in-out;
-  }
-
-  .main-nav.is-active {
-      transform: translateX(0); /* Slide in from left */
-      /* opacity: 1; visibility: visible; */
-  }
-
-  .main-nav ul {
-      flex-direction: column; /* Stack items vertically */
-      gap: var(--spacing-unit) * 1.5; /* Adjust gap for vertical items */
-      width: 100%; /* Make ul take full width of the panel */
-  }
-
-  .main-nav li {
-      width: 100%;
-      text-align: center;
-  }
-
-  .main-nav a, /* This is now .nav-link */
-  .main-nav .nav-link, /* Target the links specifically */
-  .main-nav #theme-toggle,
-  .main-nav #lang-toggle {
-      display: block; /* Make full width for easy tapping */
-      padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit); /* Adjust padding */
-      font-size: 1.2rem; /* Slightly larger text for mobile menu */
-      /* Ensure colors are correct for mobile menu background */
-      color: var(--clr-text);
-  }
-  
-  .main-nav .nav-link:hover,
-  .main-nav .nav-link:focus,
-  .main-nav .nav-link.active {
-      color: var(--clr-accent); /* Hover/active color */
-      background-color: rgba(var(--clr-accent-rgb, 56, 178, 172), 0.1); /* Subtle background on hover/active */
-  }
-  
-  /* Theme/Lang toggle buttons specific styling in mobile menu */
-  .main-nav #theme-toggle {
-      /* existing styles fine, ensure color var(--clr-text) is applied */
-  }
-  .main-nav #theme-toggle:hover,
-  .main-nav #theme-toggle:focus {
-      color: var(--clr-accent);
-  }
-
-  .main-nav #lang-toggle {
-      color: var(--clr-accent); /* Keep consistent with desktop toggle */
-      border-color: var(--clr-accent);
-  }
-  .main-nav #lang-toggle:hover,
-  .main-nav #lang-toggle:focus {
-      background-color: var(--clr-accent);
-      color: var(--clr-background);
-  }
-
-
-  .nav-toggle { /* Hamburger button */
-      display: block; /* Show the hamburger button */
-  }
-  
-  /* Hide desktop nav items when hamburger is active, show mobile nav */
-  .main-nav:not(.is-active) ul { /* This is for desktop - hide when toggle is visible */
-      /* This rule might be tricky. Simpler to just let .main-nav.is-active control visibility */
-  }
-  
-  /* If you had a logo area and want it to disappear on mobile to give space to toggle */
-  /* .logo-area { display: none; } */
-
-}
-
-/* Re-assert desktop styles if needed (if mobile-first was more aggressive) */
-/* This media query block is for any desktop-specific overrides */
-/* Your existing @media (min-width: 768px) block can house these */
-/*
-@media (min-width: 768px) {
-  .nav-container {
-      justify-content: center; /* Or flex-end, depending on desired desktop layout * /
-  }
-  .main-nav {
-      position: static; /* Reset from fixed */
-/*transform: none; /* Reset transform */
-/*height: auto; /* Reset height */
-/*background-color: transparent; /* Reset background */
-/*display: block; /* Ensure it's visible and takes space * /
-  }
-  .main-nav ul {
-      flex-direction: row; /* Ensure horizontal layout * /
-      justify-content: center; /* Or flex-end * /
-      align-items: center;
-      gap: calc(var(--spacing-unit) * 2);
-  }
-  .nav-toggle {
-      display: none; /* Hide hamburger on desktop * /
-  }
-}
-*/
-/* Add this to your :root and body.dark-mode for the hover background */
-:root {
-  /* ... other variables ... */
-  --clr-accent-rgb: 56, 178, 172; /* Teal (from #38B2AC) */
-}
-body.dark-mode {
-  /* ... other variables ... */
-  --clr-accent-rgb: 79, 209, 197; /* Brighter Teal (from #4FD1C5) */
-}
-
-/* --- Language Toggle Visibility --- */
-
-/* Hide Japanese content by default */
-.lang-ja {
-  display: none;
-}
-
-/* Ensure English content is displayed by default */
-/* Use 'block' for block-level elements like divs, paragraphs */
-/* Use 'inline' or 'inline-block' for span elements if you use them later */
-.lang-en {
-  display: block; /* Or adjust as needed based on element type */
-}
-
-/* When Japanese is selected (via class on body), show Japanese and hide English */
-body.lang-selected-ja .lang-ja {
-  display: block; /* Or adjust as needed */
-}
-
-body.lang-selected-ja .lang-en {
-  display: none;
-}
-
-/* Style the language toggle button */
-#lang-toggle {
-  background: none;
-  border: 1px solid var(--clr-accent); /* Give it a subtle border */
-  color: var(--clr-accent);
-  padding: 0.2em 0.6em; /* Adjust padding */
-  font-size: 0.9rem; /* Make it slightly smaller than nav links */
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-left: var(--spacing-unit); /* Space from theme toggle */
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-#lang-toggle:hover,
-#lang-toggle:focus {
-  background-color: var(--clr-accent);
-  color: var(--clr-background); /* Invert colors on hover */
-  outline: none;
-}
+/* --- Language Toggle Visibility (for page content) --- */
+.lang-ja { display: none; }
+.lang-en { display: block; }
+body.lang-selected-ja .lang-ja { display: block; }
+body.lang-selected-ja .lang-en { display: none; }
 
 /* --- Styling for Narrative Enhancements --- */
-
-/* Subheadings within the narrative */
 #about h3 {
-  font-size: 1.5rem; /* Slightly smaller than section h2 */
-  color: var(--clr-accent); /* Use accent color to stand out */
-  margin-top: calc(var(--spacing-unit) * 2.5); /* Add space above */
-  margin-bottom: calc(var(--spacing-unit) * 1); /* Space below */
-  font-weight: 700; /* Make them bold (Lato supports 700) */
+  font-size: 1.5rem;
+  color: var(--clr-accent);
+  margin-top: calc(var(--spacing-unit) * 2.5);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  font-weight: 700;
 }
-
-/* First h3 might need less top margin if h2 already provides enough */
 #about h3:first-of-type {
     margin-top: calc(var(--spacing-unit) * 1.5);
 }
-
-/* Pull Quote Styling */
 .pull-quote {
   border-left: 4px solid var(--clr-accent);
   padding-left: calc(var(--spacing-unit) * 1.5);
   margin-top: calc(var(--spacing-unit) * 2);
   margin-bottom: calc(var(--spacing-unit) * 2);
-  margin-left: calc(var(--spacing-unit) * 1); /* Optional indent */
-  font-size: 1.15rem; /* Slightly larger */
+  margin-left: calc(var(--spacing-unit) * 1);
+  font-size: 1.15rem;
   font-style: italic;
-  color: var(--clr-heading); /* Use heading color for emphasis */
+  color: var(--clr-heading);
 }
-
 .pull-quote strong {
-    font-style: normal; /* Reset italic for the bolded part if needed */
+    font-style: normal;
 }
-
-/* Strategic Bolding (already handled by HTML strong tag, but ensure it's visible) */
 strong {
-  font-weight: 700; /* Ensure boldness is applied (Roboto supports 500/700) */
-  color: var(--clr-heading); /* Make bold text slightly more prominent */
+  font-weight: 700;
+  color: var(--clr-heading);
 }
-
-/* Optional: Subtle Divider */
 .section-divider {
     border: none;
     height: 1px;
@@ -533,41 +349,180 @@ strong {
     margin-top: calc(var(--spacing-unit) * 3);
     margin-bottom: calc(var(--spacing-unit) * 3);
 }
+
 /* Footer */
 .main-footer {
   text-align: center;
   padding: calc(var(--spacing-unit) * 2);
   margin-top: calc(var(--spacing-unit) * 3);
   font-size: 0.875rem;
-  color: var(--clr-subtle-text); /* Use subtle text color variable */
-  border-top: 1px solid var(--clr-border); /* Use border color variable */
-  transition: border-color 0.3s ease; /* Smooth transition */
+  color: var(--clr-subtle-text);
+  border-top: 1px solid var(--clr-border);
+  transition: border-color 0.3s ease;
 }
 
-/* Responsive Adjustments (Mobile First Principle) */
-@media (min-width: 768px) {
-  /* Placeholder for future responsive styles */
+/* ======================================================== */
+/* START: MOBILE NAVIGATION OVERRIDES (Max-Width Media Query) */
+/* ======================================================== */
 
-  /* Example: Apply grid layout to skills list (uncomment and modify if used) */
-   /*
+@media (max-width: 767.98px) {
+    /* .nav-container on mobile:
+       HTML Source Order: logo-area | nav-toggles-group | nav-toggle | main-nav
+       With `justify-content: space-between;` on .nav-container:
+       - If logo-area is empty, nav-toggles-group will be on the left.
+       - nav-toggle (hamburger) will be on the far right because main-nav is taken out of flow.
+    */
+    .nav-container {
+        /* justify-content: space-between; /* Already set globally */
+    }
+
+    /* Mobile: The .main-nav (page links container) becomes the slide-out panel */
+    .main-nav { /* This is the <nav id="main-navigation"> */
+        position: fixed;
+        top: 0;
+        left: 0; /* Slide in from left */
+        width: 100%;
+        height: 100vh;
+        background-color: var(--clr-background);
+        z-index: 1000; /* Below hamburger button, above page content */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transform: translateX(-100%); /* Hidden off-screen to the left by default */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .main-nav.is-active {
+        transform: translateX(0); /* Slide into view when active */
+    }
+
+    /* Mobile: UL of page links INSIDE the slide-out panel */
+    .main-nav ul {
+        /* display: flex; /* Ensured by .main-nav.is-active ul for visibility below */
+        flex-direction: column; /* Stack page links vertically */
+        gap: var(--spacing-unit) * 1.5; /* Space between vertical links */
+        width: 100%; /* Take full width of the panel */
+        padding: 0; /* Reset padding if any */
+        margin:0; /* Reset margin if any */
+    }
+
+    /* This rule ensures the UL is shown only when the panel is active */
+    .main-nav.is-active ul {
+        display: flex; /* Make the ul of page links visible */
+    }
+    /* Hide the ul by default on mobile, as its parent .main-nav is hidden. */
+    /* If .main-nav wasn't transformed, you'd hide .main-nav ul here. */
+    @media (max-width: 767.98px) {
+        .main-nav ul:not(.main-nav.is-active ul) { /* A bit redundant, .main-nav transform handles it */
+             /* display: none; */
+        }
+    }
+
+
+    .main-nav li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .main-nav a.nav-link { /* Page links inside the mobile menu */
+        display: block; /* Make them full-width for easy tapping */
+        padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5); /* More tap area */
+        font-size: 1.25rem; /* Slightly larger text for mobile menu links */
+        color: var(--clr-text);
+    }
+    .main-nav a.nav-link:hover,
+    .main-nav a.nav-link:focus,
+    .main-nav a.nav-link.active {
+        color: var(--clr-accent);
+        background-color: rgba(var(--clr-accent-rgb), 0.1); /* Subtle hover background */
+    }
+
+    /* Mobile: Show the hamburger button */
+    .nav-toggle {
+        display: block;
+    }
+
+    /* Styles for always-visible .nav-toggles-group and its children (#theme-toggle, #lang-toggle)
+       are already defined globally and should work as is on mobile unless overrides are needed.
+       Their position is handled by .nav-container flex properties.
+    */
+}
+
+/* ======================================================== */
+/* END: MOBILE NAVIGATION OVERRIDES                       */
+/* ======================================================== */
+
+
+/* ======================================================== */
+/* START: DESKTOP NAVIGATION RESETS/OVERRIDES (Min-Width Media Query) */
+/* ======================================================== */
+
+@media (min-width: 768px) {
+    /* Desktop: Hide the hamburger button */
+    .nav-toggle {
+        display: none;
+    }
+
+    /* Desktop: Ensure .main-nav (page links container) is correctly reset from mobile styles */
+    .main-nav { /* This is <nav id="main-navigation"> */
+        position: static; /* Reset from fixed */
+        transform: none;  /* Reset transform */
+        height: auto;     /* Reset height */
+        width: auto;      /* Allow it to size based on its content (the ul) */
+        background-color: transparent; /* Reset background */
+        z-index: auto;    /* Reset z-index */
+        /* It's a flex item in .nav-container, no need for display:flex here unless controlling its own children */
+        /* order property will position it within .nav-container */
+    }
+
+    /* Desktop: Ensure the UL of page links is horizontal */
+    .main-nav ul {
+        display: flex !important; /* Ensure desktop nav links are visible and flexed */
+        flex-direction: row;    /* Explicitly row for desktop */
+        /* Other desktop ul styles (gap, align-items, etc.) are already defined globally */
+    }
+
+    /* Desktop layout of .nav-container children:
+       HTML Source Order in .nav-container: logo-area | nav-toggles-group | nav-toggle | main-nav
+       Target Layout: Logo (left) | Page Links (center/leftish) .... | Toggles Group (right)
+    */
+    .logo-area {
+        order: 1; /* First item */
+    }
+    .main-nav { /* Page links container */
+        order: 2; /* Second item */
+        margin-right: auto; /* Pushes .nav-toggles-group to the far right */
+    }
+    .nav-toggles-group {
+        order: 3; /* Third item, will be on the far right */
+    }
+    /* .nav-toggle is display:none on desktop, its order is not critical here */
+
+
+    /* --- Your existing other desktop-specific styles --- */
+    /* Example: Skills list in a grid */
    .skills-list {
        display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-       gap: var(--spacing-unit);
+       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust minmax as needed */
+       gap: var(--spacing-unit) * 1.5;
    }
-   */
 
-  /* Example: Adjust project layout on larger screens (uncomment and modify if used) */
-  /*
+  /* Example: Project section in two columns */
   #project .container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(300px, 1fr) 2fr; /* Image column and text column */
       gap: calc(var(--spacing-unit) * 3);
-      align-items: center;
+      align-items: flex-start; /* Align items to the top of their grid area */
   }
   .project-image {
-      margin-bottom: 0; /* Reset margin if using grid */
-  /* }
-  */
-
+      margin-bottom: 0; /* Reset margin if it was for single column layout */
+      /* max-width: 400px; /* Optional: constrain image width */
+  }
+  .project-description {
+      /* Text content will flow in the second column */
+  }
 }
+/* ======================================================== */
+/* END: DESKTOP NAVIGATION RESETS/OVERRIDES               */
+/* ======================================================== */

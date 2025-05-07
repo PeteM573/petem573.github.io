@@ -25,23 +25,28 @@
 <body>
 
     <header class="main-header">
-        <div class="nav-container"> <!-- Added a container for flex layout -->
-            <div class="logo-area"> <!-- Optional: if you ever add a logo/name here -->
-                <!-- <a href="#" class="site-title">Pete Molski</a> -->
+        <div class="nav-container">
+            <div class="logo-area">
+                <!-- Optional: <a href="#" class="site-title">Your Name</a> -->
             </div>
+
+            <!-- Always visible toggles will go here, positioned by CSS -->
+            <div class="nav-toggles-group">
+                <button id="theme-toggle" aria-label="Toggle light and dark modes">🌓</button>
+                <button id="lang-toggle" aria-label="Switch language">日本語</button>
+            </div>
+
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="hamburger-icon"></span> <!-- This will be styled into a hamburger -->
+                <span class="hamburger-icon"></span>
             </button>
-            <nav class="main-nav" id="main-navigation"> <!-- Added ID for JS -->
+
+            <nav class="main-nav" id="main-navigation"> <!-- This nav will be controlled by the hamburger -->
                 <ul>
                     <li><a href="#about" class="nav-link">About</a></li>
                     <li><a href="#project" class="nav-link">Project</a></li>
                     <li><a href="#skills" class="nav-link">Skills</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
-                    <!-- Add the Theme Toggle Button -->
-                    <li><button id="theme-toggle" aria-label="Toggle light and dark modes">🌓</button></li>
-                    <!-- Add the Language Toggle Button -->
-                    <li><button id="lang-toggle" aria-label="Switch language">日本語</button></li>
+                    <!-- Toggles are MOVED OUT from here -->
                 </ul>
             </nav>
         </div>
